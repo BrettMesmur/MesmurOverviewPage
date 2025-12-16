@@ -26,6 +26,9 @@ export default function Carousel({ images, title }: CarouselProps) {
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  const prev = () => setIndex((i) => (i - 1 + length) % Math.max(length, 1));
+  const next = () => setIndex((i) => (i + 1) % Math.max(length, 1));
+
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
@@ -42,9 +45,6 @@ export default function Carousel({ images, title }: CarouselProps) {
     node.addEventListener('keydown', onKey);
     return () => node.removeEventListener('keydown', onKey);
   }, [length]);
-
-  const prev = () => setIndex((i) => (i - 1 + length) % Math.max(length, 1));
-  const next = () => setIndex((i) => (i + 1) % Math.max(length, 1));
 
   useEffect(() => {
     setIndex(0);
@@ -72,124 +72,76 @@ export default function Carousel({ images, title }: CarouselProps) {
     );
   }
 
-  const renderDesktop = () => {
-    const showControls = length > 1;
-
-    const slideOffset = (idx: number) => {
-      if (length === 1) return 0;
-      if (idx === index) return 0;
-      if ((index - idx + length) % length === 1) return -1; // immediate left
-      if ((idx - index + length) % length === 1) return 1; // immediate right
-      return null;
-    };
-
-    return (
-      <div className="relative mt-6 min-h-[420px] overflow-hidden">
-        {images.map((src, idx) => {
-          const offset = slideOffset(idx);
-          if (offset === null) {
-            return null;
-          }
-
-          const isActive = offset === 0;
-          const translate = offset * 110;
-          const onClick = offset === -1 ? prev : offset === 1 ? next : undefined;
-
-          return (
-            <button
-              key={idx}
-              aria-label={`${title} slide ${idx + 1}`}
-              onClick={onClick}
-              disabled={!onClick || !showControls}
-              className="absolute inset-0 mx-auto flex w-full max-w-5xl items-center justify-center focus:outline-none focus:ring-2 focus:ring-aurora/70"
-              style={{
-                transform: `translateX(${translate}%) scale(${isActive ? 1 : 0.9})`,
-                opacity: isActive ? 1 : 0.82,
-                pointerEvents: isActive || showControls ? 'auto' : 'none',
-                transition: 'transform 500ms ease-out, opacity 500ms ease-out',
-              }}
-            >
-              <div className="w-4/5 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-glow">
-                <Image
-                  src={src}
-                  alt={`${title} ${idx + 1}`}
-                  width={900}
-                  height={600}
-                  sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </button>
-          );
-        })}
-        {showControls && (
-          <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
-            <span className="rounded-full bg-white/10 px-3 py-1 text-sm text-gray-100">Click sides to navigate</span>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderMobile = () => (
-    <div className="relative mt-6 w-full touch-pan-y focus:outline-none">
-      <div className="overflow-hidden rounded-2xl border border-white/10 shadow-glow">
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${index * 100}%)` }}
-        >
-          {images.map((src, i) => (
-            <div key={i} className="relative h-72 w-full flex-shrink-0">
-              <Image
-                src={src}
-                alt={`${title} ${i + 1}`}
-                fill
-                sizes="100vw"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      {length > 1 && (
-        <div className="mt-3 flex justify-center gap-2">
-          {images.map((_, i) => (
-            <button
-              key={i}
-              aria-label={`Go to slide ${i + 1}`}
-              onClick={() => setIndex(i)}
-              className={`h-2 w-6 rounded-full transition-all ${
-                i === index ? 'bg-aurora' : 'bg-white/20'
-              }`}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const showControls = length > 1;
+  const slideHeight = isMobile ? 'h-72' : 'h-[420px]';
 
   return (
     <div
       ref={containerRef}
       tabIndex={0}
-      className="group relative"
-      onTouchStart={isMobile ? handleTouchStart : undefined}
-      onTouchEnd={isMobile ? handleTouchEnd : undefined}
+      className="group relative focus:outline-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {length === 1 && !isMobile && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 shadow-glow">
-          <Image
-            src={images[0]}
-            alt={`${title} 1`}
-            width={1200}
-            height={700}
-            sizes="(min-width: 1024px) 60vw, (min-width: 768px) 75vw, 90vw"
-            className="h-full w-full object-cover"
-          />
+      <div className={`relative mt-6 overflow-hidden rounded-2xl border border-white/10 shadow-glow ${slideHeight}`}>
+        <div
+          className="flex h-full transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {images.map((src, i) => (
+            <button
+              key={i}
+              onClick={showControls ? next : undefined}
+              aria-label={`${title} slide ${i + 1}`}
+              className="relative h-full w-full flex-shrink-0 focus:outline-none"
+              style={{ cursor: showControls ? 'pointer' : 'default' }}
+            >
+              <Image
+                src={src}
+                alt={`${title} ${i + 1}`}
+                fill
+                sizes="(min-width: 1024px) 60vw, (min-width: 768px) 75vw, 100vw"
+                className="h-full w-full object-cover"
+                priority={i === 0}
+              />
+            </button>
+          ))}
+        </div>
+
+        {showControls && (
+          <>
+            <button
+              type="button"
+              onClick={prev}
+              aria-label="Previous slide"
+              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white opacity-0 transition-opacity duration-200 hover:bg-black/55 focus:opacity-100 focus:outline-none group-hover:opacity-100"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Next slide"
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white opacity-0 transition-opacity duration-200 hover:bg-black/55 focus:opacity-100 focus:outline-none group-hover:opacity-100"
+            >
+              ›
+            </button>
+          </>
+        )}
+      </div>
+
+      {showControls && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`h-2 w-8 rounded-full transition-all duration-200 ${i === index ? 'bg-aurora' : 'bg-white/25'}`}
+            />
+          ))}
         </div>
       )}
-      {length === 1 && isMobile && renderMobile()}
-      {length > 1 && (isMobile ? renderMobile() : renderDesktop())}
     </div>
   );
 }
