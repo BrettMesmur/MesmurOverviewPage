@@ -77,6 +77,7 @@ export default function Carousel({ images, title }: CarouselProps) {
 
     const slideOffset = (idx: number) => {
       if (length === 1) return 0;
+      if (idx === index) return 0;
       if ((index - idx + length) % length === 1) return -1; // immediate left
       if ((idx - index + length) % length === 1) return 1; // immediate right
       return null;
