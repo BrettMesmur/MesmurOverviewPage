@@ -8,18 +8,15 @@ import type { DiscoveryResult } from '@/lib/discoverImages';
 
 const howItPlays = [
   {
-    title: 'Choose heroes, build resource',
-    body: 'Recruit a tight-knit crew whose abilities set up the economy you want to snowball.',
+    title: 'Choose heroes',
     image: '/images/GameplayScreenshots/HeroesScreenShot.png',
   },
   {
     title: 'Build resource engine',
-    body: 'Stack relics and cards that feed into each other until every turn fuels the next.',
     image: '/images/GameplayScreenshots/BuildEngineScreenShot.png',
   },
   {
     title: 'Battle enemies',
-    body: 'Push your new combos against ruthless bosses and refine the loop each run.',
     image: '/images/GameplayScreenshots/CombatScreenshot.png',
   },
 ];
@@ -114,7 +111,7 @@ export default function PageClient({ discovery }: Props) {
             <div>
               <h2 className="text-3xl md:text-4xl">How It Plays</h2>
               <p className="text-gray-200">
-                choose a small crew, build a powerful resource engine around them, and then test the combos
+                Choose a small crew, build a powerful resource engine around them, and then test the combos
                 you discover against tough boss battles.
               </p>
             </div>
@@ -122,18 +119,15 @@ export default function PageClient({ discovery }: Props) {
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {howItPlays.map((step) => (
               <div key={step.title} className="glass-panel flex h-full flex-col overflow-hidden rounded-2xl">
-                <div className="relative aspect-video w-full">
+                <h3 className="px-5 pt-5 text-xl text-aurora">{step.title}</h3>
+                <div className="relative mt-4 aspect-video w-full flex-1">
                   <Image
                     src={step.image}
                     alt={step.title}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
+                    className="object-contain"
                   />
-                </div>
-                <div className="p-5">
-                  <h3 className="mb-2 text-xl text-aurora">{step.title}</h3>
-                  <p className="text-gray-200">{step.body}</p>
                 </div>
               </div>
             ))}
