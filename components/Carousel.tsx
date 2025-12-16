@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import type React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -50,15 +50,6 @@ export default function Carousel({ images, title }: CarouselProps) {
     setIndex(0);
   }, [length]);
 
-  const visibleIndexes = useMemo(() => {
-    if (length === 0) return [];
-    if (length === 1) return [0];
-    if (isMobile) return [index];
-    const left = (index - 1 + length) % length;
-    const right = (index + 1) % length;
-    return Array.from(new Set([left, index, right]));
-  }, [index, length, isMobile]);
-
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStart.current = e.touches[0].clientX;
   };
@@ -82,40 +73,51 @@ export default function Carousel({ images, title }: CarouselProps) {
   }
 
   const renderDesktop = () => {
-    const leftIdx = (index - 1 + length) % length;
-    const rightIdx = (index + 1) % length;
     const showControls = length > 1;
 
-    return (
-      <div className="relative mt-6 flex min-h-[420px] items-center justify-center gap-4">
-        {visibleIndexes.map((idx) => {
-          const position = idx === index ? 'center' : idx === leftIdx ? 'left' : 'right';
-          const baseClasses =
-            'relative transition-all duration-500 ease-out cursor-pointer rounded-2xl overflow-hidden border border-white/10 shadow-glow';
-          const sizes = {
-            left: 'w-1/4 scale-90 opacity-80 hover:opacity-100',
-            center: 'w-2/5 scale-100 opacity-100 z-10',
-            right: 'w-1/4 scale-90 opacity-80 hover:opacity-100',
-          } as const;
+    const slideOffset = (idx: number) => {
+      if (length === 1) return 0;
+      if ((index - idx + length) % length === 1) return -1; // immediate left
+      if ((idx - index + length) % length === 1) return 1; // immediate right
+      return null;
+    };
 
-          const onClick = position === 'left' ? prev : position === 'right' ? next : undefined;
+    return (
+      <div className="relative mt-6 min-h-[420px] overflow-hidden">
+        {images.map((src, idx) => {
+          const offset = slideOffset(idx);
+          if (offset === null) {
+            return null;
+          }
+
+          const isActive = offset === 0;
+          const translate = offset * 110;
+          const onClick = offset === -1 ? prev : offset === 1 ? next : undefined;
 
           return (
             <button
-              key={`${idx}-${position}`}
+              key={idx}
               aria-label={`${title} slide ${idx + 1}`}
               onClick={onClick}
               disabled={!onClick || !showControls}
-              className={`${baseClasses} ${sizes[position]} bg-white/5 focus:outline-none focus:ring-2 focus:ring-aurora/70`}
+              className="absolute inset-0 mx-auto flex w-full max-w-5xl items-center justify-center focus:outline-none focus:ring-2 focus:ring-aurora/70"
+              style={{
+                transform: `translateX(${translate}%) scale(${isActive ? 1 : 0.9})`,
+                opacity: isActive ? 1 : 0.82,
+                pointerEvents: isActive || showControls ? 'auto' : 'none',
+                transition: 'transform 500ms ease-out, opacity 500ms ease-out',
+              }}
             >
-              <Image
-                src={images[idx]}
-                alt={`${title} ${idx + 1}`}
-                width={900}
-                height={600}
-                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
-                className="h-full w-full object-cover"
-              />
+              <div className="w-4/5 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-glow">
+                <Image
+                  src={src}
+                  alt={`${title} ${idx + 1}`}
+                  width={900}
+                  height={600}
+                  sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </button>
           );
         })}
@@ -131,15 +133,21 @@ export default function Carousel({ images, title }: CarouselProps) {
   const renderMobile = () => (
     <div className="relative mt-6 w-full touch-pan-y focus:outline-none">
       <div className="overflow-hidden rounded-2xl border border-white/10 shadow-glow">
-        <div className="relative h-72 w-full">
-          <Image
-            key={index}
-            src={images[index]}
-            alt={`${title} ${index + 1}`}
-            fill
-            sizes="100vw"
-            className="h-full w-full object-cover transition-opacity duration-500"
-          />
+        <div
+          className="flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {images.map((src, i) => (
+            <div key={i} className="relative h-72 w-full flex-shrink-0">
+              <Image
+                src={src}
+                alt={`${title} ${i + 1}`}
+                fill
+                sizes="100vw"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
       {length > 1 && (
