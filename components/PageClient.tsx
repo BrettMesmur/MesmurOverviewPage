@@ -77,9 +77,6 @@ export default function PageClient({ discovery }: Props) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0b1022]" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center px-4 py-24">
           <div className="max-w-2xl space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm uppercase tracking-[0.2em] text-aurora">
-              New roguelite CCG in development
-            </p>
             <h1 className="text-4xl font-display leading-tight text-white drop-shadow-lg md:text-6xl">
               Adventure is in the cards
             </h1>
@@ -109,7 +106,7 @@ export default function PageClient({ discovery }: Props) {
         <section id="heroes" className="section mx-auto max-w-6xl px-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl md:text-4xl">Collect Powerful Heroes and Items</h2>
+              <h2 className="mt-8 text-3xl md:text-4xl">Collect Powerful Heroes and Items</h2>
               <p className="text-gray-200">Draft rare cards, awaken relics, and assemble a squad built for impossible odds.</p>
             </div>
           </div>
