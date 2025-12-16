@@ -75,7 +75,7 @@ export default function PageClient({ discovery }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-aurora/20 via-prism/10 to-transparent" />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0b1022]" />
-        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center px-4 py-24">
+        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center justify-center px-4 py-24">
           <div className="max-w-3xl space-y-6 text-center">
             <h1 className="text-4xl font-display leading-tight text-white drop-shadow-lg md:text-6xl">
               Adventure is in the cards
