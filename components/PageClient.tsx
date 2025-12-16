@@ -53,7 +53,7 @@ export default function PageClient({ discovery }: Props) {
         </div>
       </nav>
 
-      <header id="home" className="section relative min-h-[80vh] overflow-hidden">
+      <header id="home" className="section relative min-h-screen overflow-hidden">
         {discovery.heroBackground ? (
           <Image
             src={discovery.heroBackground}
@@ -67,7 +67,7 @@ export default function PageClient({ discovery }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-aurora/20 via-prism/10 to-transparent" />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0b1022]" />
-        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-end justify-center px-4 pb-16 pt-24">
+        <div className="relative mx-auto flex min-h-screen max-w-6xl items-end justify-center px-4 pb-16 pt-24">
           <div className="max-w-3xl space-y-4 text-center">
             <h1 className="font-display text-3xl leading-tight text-white drop-shadow-lg md:text-4xl">
               Adventure is in the cards
