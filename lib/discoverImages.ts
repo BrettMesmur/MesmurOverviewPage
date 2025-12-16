@@ -65,7 +65,10 @@ async function getImagesFromDirectories(dirs: string[]): Promise<string[]> {
 
 function toPublicUrl(publicDir: string, filePath: string) {
   const relative = path.relative(publicDir, filePath);
-  return '/' + relative.split(path.sep).join('/');
+  const normalized = relative.split(path.sep).join('/');
+  const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+  const prefix = basePath ? `${basePath}/` : '/';
+  return `${prefix}${normalized}`;
 }
 
 export async function discoverImages(): Promise<DiscoveryResult> {
