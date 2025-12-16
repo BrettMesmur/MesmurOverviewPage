@@ -1,15 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-
-const MOBILE_BREAKPOINT = 768;
 
 type CarouselProps = {
   images: string[];
   title: string;
 };
+
+const MOBILE_BREAKPOINT = 768;
 
 export default function Carousel({ images, title }: CarouselProps) {
   const [index, setIndex] = useState(0);
@@ -41,14 +40,21 @@ export default function Carousel({ images, title }: CarouselProps) {
     };
     node.addEventListener('keydown', onKey);
     return () => node.removeEventListener('keydown', onKey);
-  }, [length]);
-
-  const prev = () => setIndex((i) => (i - 1 + length) % Math.max(length, 1));
-  const next = () => setIndex((i) => (i + 1) % Math.max(length, 1));
+  });
 
   useEffect(() => {
     setIndex(0);
   }, [length]);
+
+  const prev = () => {
+    if (length <= 1) return;
+    setIndex((i) => (i - 1 + length) % length);
+  };
+
+  const next = () => {
+    if (length <= 1) return;
+    setIndex((i) => (i + 1) % length);
+  };
 
   const visibleIndexes = useMemo(() => {
     if (length === 0) return [];
@@ -75,8 +81,8 @@ export default function Carousel({ images, title }: CarouselProps) {
 
   if (length === 0) {
     return (
-      <div className="glass-panel flex h-64 items-center justify-center rounded-2xl border border-white/10 text-center text-lg text-gray-200">
-        <p>Drop images into the right folders to see the gallery.</p>
+      <div className="glass-panel mt-8 flex h-64 items-center justify-center rounded-3xl text-center text-sm md:text-base text-gray-100">
+        Drop images into the proper folders to see them appear here.
       </div>
     );
   }
@@ -86,51 +92,54 @@ export default function Carousel({ images, title }: CarouselProps) {
     const rightIdx = (index + 1) % length;
     const showControls = length > 1;
 
+    const positions: Record<'left' | 'center' | 'right', string> = {
+      left: 'md:-translate-x-6 -rotate-1 w-[38%] lg:w-[32%] opacity-80',
+      center: 'z-20 w-[54%] lg:w-[56%] shadow-glow',
+      right: 'md:translate-x-6 rotate-1 w-[38%] lg:w-[32%] opacity-80',
+    };
+
     return (
-      <div className="relative mt-6 flex min-h-[420px] items-center justify-center gap-4">
-        {visibleIndexes.map((idx) => {
-          const position = idx === index ? 'center' : idx === leftIdx ? 'left' : 'right';
-          const baseClasses =
-            'relative transition-all duration-500 ease-out cursor-pointer rounded-2xl overflow-hidden border border-white/10 shadow-glow';
-          const sizes = {
-            left: 'w-1/4 scale-90 opacity-80 hover:opacity-100',
-            center: 'w-2/5 scale-100 opacity-100 z-10',
-            right: 'w-1/4 scale-90 opacity-80 hover:opacity-100',
-          } as const;
+      <div className="relative mt-10">
+        <div className="pointer-events-none absolute inset-0 -z-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-plate" />
+        <div className="relative flex min-h-[420px] items-center justify-center px-6">
+          {visibleIndexes.map((idx) => {
+            const position = idx === index ? 'center' : idx === leftIdx ? 'left' : 'right';
+            const isDisabled = !showControls || position === 'center';
+            const onClick = position === 'left' ? prev : position === 'right' ? next : undefined;
 
-          const onClick = position === 'left' ? prev : position === 'right' ? next : undefined;
-
-          return (
-            <button
-              key={`${idx}-${position}`}
-              aria-label={`${title} slide ${idx + 1}`}
-              onClick={onClick}
-              disabled={!onClick || !showControls}
-              className={`${baseClasses} ${sizes[position]} bg-white/5 focus:outline-none focus:ring-2 focus:ring-aurora/70`}
-            >
-              <Image
-                src={images[idx]}
-                alt={`${title} ${idx + 1}`}
-                width={900}
-                height={600}
-                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
-                className="h-full w-full object-cover"
-              />
-            </button>
-          );
-        })}
-        {showControls && (
-          <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
-            <span className="rounded-full bg-white/10 px-3 py-1 text-sm text-gray-100">Click sides to navigate</span>
-          </div>
-        )}
+            return (
+              <button
+                key={`${idx}-${position}`}
+                aria-label={`${title} slide ${idx + 1}`}
+                onClick={onClick}
+                disabled={isDisabled}
+                className={`group absolute overflow-hidden rounded-3xl border border-white/10 transition-all duration-500 ease-out focus:outline-none focus:ring-2 focus:ring-aurora/70 ${positions[position]}`}
+              >
+                <Image
+                  src={images[idx]}
+                  alt={`${title} ${idx + 1}`}
+                  width={1200}
+                  height={760}
+                  sizes="(min-width: 1280px) 40vw, (min-width: 1024px) 50vw, (min-width: 768px) 60vw"
+                  className={`h-full w-full object-cover transition duration-500 ${position === 'center' ? 'scale-100' : 'scale-95 group-hover:scale-100 group-hover:opacity-100'} ${position !== 'center' ? 'opacity-80' : ''}`}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
+              </button>
+            );
+          })}
+          {showControls && (
+            <div className="absolute -bottom-4 flex items-center gap-3 rounded-full bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.18em] text-gray-200">
+              Click sides to navigate
+            </div>
+          )}
+        </div>
       </div>
     );
   };
 
   const renderMobile = () => (
-    <div className="relative mt-6 w-full touch-pan-y focus:outline-none">
-      <div className="overflow-hidden rounded-2xl border border-white/10 shadow-glow">
+    <div className="mt-8 w-full" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-plate shadow-glow">
         <div className="relative h-72 w-full">
           <Image
             key={index}
@@ -138,20 +147,20 @@ export default function Carousel({ images, title }: CarouselProps) {
             alt={`${title} ${index + 1}`}
             fill
             sizes="100vw"
-            className="h-full w-full object-cover transition-opacity duration-500"
+            className="h-full w-full object-cover"
+            priority={false}
           />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/40" />
         </div>
       </div>
       {length > 1 && (
-        <div className="mt-3 flex justify-center gap-2">
+        <div className="mt-4 flex justify-center gap-2">
           {images.map((_, i) => (
             <button
               key={i}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={`h-2 w-6 rounded-full transition-all ${
-                i === index ? 'bg-aurora' : 'bg-white/20'
-              }`}
+              className={`h-2.5 w-6 rounded-full transition-all ${i === index ? 'bg-aurora' : 'bg-white/25'}`}
             />
           ))}
         </div>
@@ -163,20 +172,20 @@ export default function Carousel({ images, title }: CarouselProps) {
     <div
       ref={containerRef}
       tabIndex={0}
-      className="group relative"
-      onTouchStart={isMobile ? handleTouchStart : undefined}
-      onTouchEnd={isMobile ? handleTouchEnd : undefined}
+      className="group relative outline-none"
+      aria-label={`${title} carousel`}
     >
       {length === 1 && !isMobile && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 shadow-glow">
+        <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-plate shadow-glow">
           <Image
             src={images[0]}
             alt={`${title} 1`}
-            width={1200}
-            height={700}
-            sizes="(min-width: 1024px) 60vw, (min-width: 768px) 75vw, 90vw"
+            width={1400}
+            height={840}
+            sizes="(min-width: 1024px) 60vw, (min-width: 768px) 72vw, 90vw"
             className="h-full w-full object-cover"
           />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/35" />
         </div>
       )}
       {length === 1 && isMobile && renderMobile()}

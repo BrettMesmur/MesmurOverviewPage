@@ -13,12 +13,17 @@ function isImage(file: string) {
   return IMAGE_EXTENSIONS.includes(path.extname(file).toLowerCase());
 }
 
+async function readDirSorted(dir: string) {
+  const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+  return entries.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 async function recursiveFindDirectories(
   root: string,
   targetName: string
 ): Promise<string[]> {
   const matches: string[] = [];
-  const entries = await fs.promises.readdir(root, { withFileTypes: true });
+  const entries = await readDirSorted(root);
 
   for (const entry of entries) {
     const fullPath = path.join(root, entry.name);
@@ -34,7 +39,7 @@ async function recursiveFindDirectories(
 }
 
 async function findMainImage(root: string): Promise<string | undefined> {
-  const entries = await fs.promises.readdir(root, { withFileTypes: true });
+  const entries = await readDirSorted(root);
   for (const entry of entries) {
     const fullPath = path.join(root, entry.name);
     if (entry.isDirectory()) {
@@ -52,7 +57,9 @@ async function findMainImage(root: string): Promise<string | undefined> {
 
 async function getImagesFromDirectories(dirs: string[]): Promise<string[]> {
   const all: string[] = [];
-  for (const dir of dirs) {
+  const orderedDirs = [...dirs].sort((a, b) => a.localeCompare(b));
+
+  for (const dir of orderedDirs) {
     const files = await fs.promises.readdir(dir);
     const images = files
       .filter((file) => isImage(file))

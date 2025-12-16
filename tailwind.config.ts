@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Cinzel"', '"Cormorant Garamond"', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-cinzel)', 'serif'],
+        body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'space-gradient': 'radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 35%), radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.3), transparent 30%), radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.2), transparent 40%), linear-gradient(135deg, #0b1022 0%, #0d1530 50%, #0b1022 100%)',
@@ -22,6 +22,12 @@ const config: Config = {
       },
       boxShadow: {
         glow: '0 0 30px rgba(93, 201, 255, 0.35)',
+      },
+      blur: {
+        plate: '24px',
+      },
+      maxWidth: {
+        page: '1200px',
       },
     },
   },

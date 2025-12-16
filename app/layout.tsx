@@ -17,8 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${cinzel.variable}`}>
-      <body className="bg-space-gradient text-white font-body antialiased min-h-screen">
-        {children}
+      <body className="cosmic-backdrop antialiased">
+        <div className="space-overlay" aria-hidden />
+        <div className="relative z-10 min-h-screen">{children}</div>
       </body>
     </html>
   );
