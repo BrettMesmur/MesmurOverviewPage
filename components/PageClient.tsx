@@ -75,15 +75,12 @@ export default function PageClient({ discovery }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-aurora/20 via-prism/10 to-transparent" />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0b1022]" />
-        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center justify-center px-4 py-24">
-          <div className="max-w-3xl space-y-6 text-center">
-            <h1 className="text-4xl font-display leading-tight text-white drop-shadow-lg md:text-6xl">
+        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-end justify-center px-4 pb-16 pt-24">
+          <div className="max-w-3xl space-y-4 text-center">
+            <h1 className="font-display text-3xl leading-tight text-white drop-shadow-lg md:text-4xl">
               Adventure is in the cards
             </h1>
-            <p className="text-lg text-gray-100 md:text-xl">
-              Build a crew of cosmic misfits, draft reality-warping artifacts, and dive into shifting dungeons shaped by the cards you play.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex justify-center">
               <button
                 aria-label="Try the demo"
                 className="gradient-border relative overflow-hidden rounded-full bg-aurora/20 px-6 py-3 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-aurora/30"
@@ -91,12 +88,6 @@ export default function PageClient({ discovery }: Props) {
               >
                 Try the demo
               </button>
-              <a
-                href="#heroes"
-                className="rounded-full border border-white/30 px-6 py-3 text-base font-semibold text-white/90 transition hover:bg-white/10"
-              >
-                See the roster
-              </a>
             </div>
           </div>
         </div>
