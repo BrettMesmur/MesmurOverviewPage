@@ -6,18 +6,21 @@ import Carousel from './Carousel';
 import Modal from './Modal';
 import type { DiscoveryResult } from '@/lib/discoverImages';
 
+const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+const withBasePath = (path: string) => `${basePath}${path.startsWith('/') ? path : `/${path}`}`;
+
 const howItPlays = [
   {
     title: 'Choose heroes',
-    image: '/images/GameplayScreenshots/HeroesScreenShot.png',
+    image: withBasePath('/images/GameplayScreenshots/HeroesScreenShot.png'),
   },
   {
     title: 'Build resource engine',
-    image: '/images/GameplayScreenshots/BuildEngineScreenShot.png',
+    image: withBasePath('/images/GameplayScreenshots/BuildEngineScreenShot.png'),
   },
   {
     title: 'Battle enemies',
-    image: '/images/GameplayScreenshots/CombatScreenshot.png',
+    image: withBasePath('/images/GameplayScreenshots/CombatScreenshot.png'),
   },
 ];
 
