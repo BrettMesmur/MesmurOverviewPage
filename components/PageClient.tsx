@@ -118,9 +118,12 @@ export default function PageClient({ discovery }: Props) {
           </div>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {howItPlays.map((step) => (
-              <div key={step.title} className="glass-panel flex h-full flex-col overflow-hidden rounded-2xl">
+              <div
+                key={step.title}
+                className="glass-panel flex h-full flex-col gap-4 overflow-hidden rounded-2xl pb-5"
+              >
                 <h3 className="px-5 pt-5 text-xl text-aurora">{step.title}</h3>
-                <div className="relative mt-4 aspect-video w-full flex-1">
+                <div className="relative mx-5 flex-1 overflow-hidden rounded-xl bg-black/40 shadow-inner aspect-[9/16]">
                   <Image
                     src={step.image}
                     alt={step.title}
