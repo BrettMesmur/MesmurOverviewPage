@@ -75,15 +75,15 @@ export default function PageClient({ discovery }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-aurora/20 via-prism/10 to-transparent" />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0b1022]" />
-        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center px-4 py-24">
-          <div className="max-w-2xl space-y-6">
+        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center justify-center px-4 py-24">
+          <div className="max-w-3xl space-y-6 text-center">
             <h1 className="text-4xl font-display leading-tight text-white drop-shadow-lg md:text-6xl">
               Adventure is in the cards
             </h1>
             <p className="text-lg text-gray-100 md:text-xl">
               Build a crew of cosmic misfits, draft reality-warping artifacts, and dive into shifting dungeons shaped by the cards you play.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <button
                 aria-label="Try the demo"
                 className="gradient-border relative overflow-hidden rounded-full bg-aurora/20 px-6 py-3 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-aurora/30"
@@ -103,8 +103,8 @@ export default function PageClient({ discovery }: Props) {
       </header>
 
       <main className="relative z-10 space-y-24 pb-24">
-        <section id="heroes" className="section mx-auto max-w-6xl px-4">
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <section id="heroes" className="section mx-auto max-w-6xl px-4 text-center">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-center">
             <div>
               <h2 className="mt-8 text-3xl md:text-4xl">Collect Powerful Heroes and Items</h2>
               <p className="text-gray-200">Draft rare cards, awaken relics, and assemble a squad built for impossible odds.</p>
@@ -113,8 +113,8 @@ export default function PageClient({ discovery }: Props) {
           <Carousel images={discovery.heroesAndItems} title="Heroes and Items" />
         </section>
 
-        <section id="worlds" className="section mx-auto max-w-6xl px-4">
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <section id="worlds" className="section mx-auto max-w-6xl px-4 text-center">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-center">
             <div>
               <h2 className="text-3xl md:text-4xl">Explore Strange New Worlds</h2>
               <p className="text-gray-200">Slipstream across shattered realms, each with hazards and loot that change every run.</p>
@@ -123,8 +123,8 @@ export default function PageClient({ discovery }: Props) {
           <Carousel images={discovery.worlds} title="Worlds" />
         </section>
 
-        <section id="gameplay" className="section mx-auto max-w-6xl px-4">
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <section id="gameplay" className="section mx-auto max-w-6xl px-4 text-center">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-center">
             <div>
               <h2 className="text-3xl md:text-4xl">How It Plays</h2>
               <p className="text-gray-200">Placeholder lorem ipsum to highlight the core loops and tactical texture of the adventure.</p>
