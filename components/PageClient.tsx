@@ -6,26 +6,18 @@ import Carousel from './Carousel';
 import Modal from './Modal';
 import type { DiscoveryResult } from '@/lib/discoverImages';
 
-const features = [
+const howItPlays = [
   {
-    title: 'Deck-Building Depth',
-    body: 'Chain hero abilities and relic items to craft unstoppable combos.',
+    title: 'Choose heroes',
+    image: '/images/GameplayScreenshots/HeroesScreenShot.png',
   },
   {
-    title: 'Reactive AI',
-    body: 'Foes learn your patterns, forcing you to improvise mid-encounter.',
+    title: 'Build resource engine',
+    image: '/images/GameplayScreenshots/BuildEngineScreenShot.png',
   },
   {
-    title: 'Co-op Synergy',
-    body: 'Pair with a friend to blend loadouts and discover team ultimates.',
-  },
-  {
-    title: 'Risk & Reward',
-    body: 'Push deeper for rarer loot while the void storms grow stronger.',
-  },
-  {
-    title: 'Tactical Battlemaps',
-    body: 'Cover, elevation, and environmental hazards shape every turn.',
+    title: 'Battle enemies',
+    image: '/images/GameplayScreenshots/CombatScreenshot.png',
   },
 ];
 
@@ -118,14 +110,28 @@ export default function PageClient({ discovery }: Props) {
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-center">
             <div>
               <h2 className="text-3xl md:text-4xl">How It Plays</h2>
-              <p className="text-gray-200">Placeholder lorem ipsum to highlight the core loops and tactical texture of the adventure.</p>
+              <p className="text-gray-200">
+                Choose a small crew, build a powerful resource engine around them, and then test the combos
+                you discover against tough boss battles.
+              </p>
             </div>
           </div>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <div key={feature.title} className="glass-panel rounded-2xl p-5">
-                <h3 className="mb-2 text-xl text-aurora">{feature.title}</h3>
-                <p className="text-gray-200">{feature.body}</p>
+            {howItPlays.map((step) => (
+              <div
+                key={step.title}
+                className="glass-panel flex h-full flex-col gap-4 overflow-hidden rounded-2xl pb-5"
+              >
+                <h3 className="px-5 pt-5 text-xl text-aurora">{step.title}</h3>
+                <div className="relative mx-5 flex-1 overflow-hidden rounded-xl bg-black/40 shadow-inner aspect-[9/16]">
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-contain"
+                  />
+                </div>
               </div>
             ))}
           </div>
