@@ -11,6 +11,9 @@ const nextConfig = {
   },
   basePath: isGithubPages && repoName ? `/${repoName}` : undefined,
   assetPrefix: isGithubPages && repoName ? `/${repoName}/` : undefined,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPages && repoName ? `/${repoName}` : '',
+  },
 };
 
 module.exports = nextConfig;
